@@ -2,6 +2,7 @@
   if (window.__BUY_NOW_WIDGET_INSTALLED) return;
   window.__BUY_NOW_WIDGET_INSTALLED = true;
 
+  // create the floating button
   var btn = document.createElement("button");
   btn.innerText = "BUY NOW";
   btn.style.position = "fixed";
@@ -18,14 +19,12 @@
   btn.style.zIndex = "999999";
 
   btn.onclick = function () {
-    // Try to scroll to Payhip's buy button if it exists
-    var target = document.querySelector(".product-purchase") || document.querySelector("button, .buy-button");
-    if (target) {
-      var top = target.getBoundingClientRect().top + window.scrollY - 20;
-      window.scrollTo({ top: top, behavior: "smooth" });
-    } else {
-      // fallback: scroll to very top
+    try {
+      // Scroll to the very top of the page
       window.scrollTo({ top: 0, behavior: "smooth" });
+    } catch (e) {
+      // fallback: reload the page
+      location.reload();
     }
   };
 
