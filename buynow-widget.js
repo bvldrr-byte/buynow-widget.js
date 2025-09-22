@@ -1,10 +1,19 @@
 /*!
-  BuyNow Floating Button widget - v1.0
+  BuyNow Floating Button widget - v1.0 (Hardcoded config)
   Drop into pages that accept <script src="..."> embeds.
 */
 (function () {
   if (window.__BUY_NOW_WIDGET_INSTALLED) return;
   window.__BUY_NOW_WIDGET_INSTALLED = true;
+
+  // 🔧 Hardcoded defaults (edit these if you want)
+  var DEFAULT_CONFIG = {
+    target: null,          // e.g. "#buy-buttons" if you know the ID, or null for very top
+    label: "BUY NOW",      // button text
+    offset: 12,            // px above target
+    showAfter: 120,        // show button after this scroll px
+    fallback: "scroll"     // "scroll" or "reload"
+  };
 
   function injectCSS() {
     if (document.getElementById('buynow-widget-styles')) return;
@@ -48,9 +57,7 @@
           smoothScrollTo(top);
           return;
         }
-      } catch (e) {
-        /* ignore and fallback */
-      }
+      } catch (e) { /* ignore */ }
     }
     // fallback behavior
     if ('scrollBehavior' in document.documentElement.style) {
@@ -88,25 +95,7 @@
   }
 
   function init() {
-    var placeholders = document.querySelectorAll('.buynow-widget');
-    if (!placeholders || placeholders.length === 0) {
-      // If Payhip strips the div, still create a default floating button
-      var fallbackDiv = document.createElement('div');
-      fallbackDiv.className = 'buynow-widget';
-      document.body.appendChild(fallbackDiv);
-      placeholders = [fallbackDiv];
-    }
-
-    placeholders.forEach(function (el) {
-      var cfg = {
-        target: el.getAttribute('data-target') || null,
-        label: el.getAttribute('data-label') || 'BUY NOW',
-        offset: parseInt(el.getAttribute('data-offset') || '0', 10) || 0,
-        showAfter: parseInt(el.getAttribute('data-show-after') || '120', 10) || 120,
-        fallback: (el.getAttribute('data-fallback') || 'scroll').toLowerCase()
-      };
-      createButton(cfg);
-    });
+    createButton(DEFAULT_CONFIG);
   }
 
   if (document.readyState === 'loading') {
